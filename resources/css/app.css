@@ -1,0 +1,666 @@
+/*FULL APP*/
+
+html, body, #root {
+    background-color: rgb(14, 14, 14) !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: white;
+}
+
+/*
+section, .container, .container-fluid {
+    background-color: transparent !important;
+}*/
+
+/*LOGO*/
+
+.logo {
+    transition: all 0.5s; /* Smooth transition */
+  }
+  
+  .logo:hover{
+    transform: scale(1.2); /* Increases size */
+    fill: #f3e5e5; /* Changes color */
+  }
+
+/* 1. Estilos Base (Comunes para PC y Móvil) */
+.my-card {
+    background-color: #111 !important;
+    border: 1px solid #222 !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease-in-out !important; /* Base para el hover */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: visible; /* Permite que la card suba en el hover */
+}
+
+.my-card-img-container {
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+    background-color: #000;
+    border-radius: 0 !important;
+    position: relative;
+}
+
+.my-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0 !important;
+    transition: transform 0.5s ease;
+}
+
+/* 2. Efectos Hover (Funcionan en ambos dispositivos, aunque se notan en PC) */
+.my-card:hover {
+    border-color: #666 !important; /* Un poco más claro para que se note */
+    transform: translateY(-10px) !important; /* Aumentado para visibilidad */
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.my-card:hover .my-card-img {
+    transform: scale(1.05); 
+}
+
+/* 3. Media Query para MÓVIL (Ancho Total) */
+@media (max-width: 991px) {
+    .card-wrapper {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+    }
+    
+    .my-card {
+        border-left: none !important;
+        border-right: none !important;
+    }
+
+    /* En móvil solemos desactivar el movimiento vertical para evitar saltos raros */
+    .my-card:hover {
+        transform: none !important; 
+    }
+}
+
+/* 4. Media Query para ESCRITORIO (400px Fijos) */
+@media (min-width: 992px) {
+    .card-wrapper {
+        width: 400px;
+        margin: 20px; /* Espaciado entre tarjetas */
+    }
+
+    .my-card, 
+    .my-card-img-container {
+        width: 400px !important;
+        max-width: 400px;
+    }
+}
+
+/*COLUMNS*/
+
+.row.g-1, .row.gx-1 {
+    --bs-gutter-x: 0.25rem; /* Espacio mínimo de 4px */
+}
+
+/* Ajuste para que el texto de la card se vea bien en fondo oscuro */
+.card-title {
+    color: #fff !important;
+    font-size: 1rem !important;
+    margin-bottom: 5px;
+}
+
+.card-subtitle {
+    font-size: 0.9rem !important;
+    opacity: 0.7;
+}
+
+.my-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px; /* Altura fija para el área de texto y botón */
+    padding: 15px !important;
+}
+
+/* Títulos: Máximo 1 línea */
+.my-card .card-title {
+    font-size: 1.2rem !important;
+    height: 1.4em; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+/* Descripción: Máximo 2 líneas */
+.my-card .card-subtitle {
+    height: 3em; /* Espacio para exactamente dos líneas */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Corta el texto a la segunda línea */
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/*BUTTON CARD*/
+
+.custom-button {
+  background: white;
+  border: 2px solid #000; 
+  color: #000; 
+  padding: 10px 20px; 
+  transition: background 0.9s ease-in-out, color 0.6s ease-in-out;
+}
+
+.custom-button:hover {
+  background: linear-gradient(to bottom, #000, #333); 
+  color: #fff; 
+}
+
+
+.custom-button.clicked {
+  background: transparent; 
+  border: 2px solid #000; 
+}
+
+.custom-button.clicked .mdb-icon {
+  display: inline; 
+}
+
+.custom-button.clicked:disabled {
+  background: transparent; 
+  border: 2px solid rgb(126, 124, 124); 
+  pointer-events: none; 
+  color:rgb(126, 124, 124);
+}
+
+.custom-button:disabled {
+  background: transparent; 
+  border: 2px solid rgb(126, 124, 124); 
+  pointer-events: none; 
+  color:rgb(126, 124, 124);
+}
+
+/*ICONS*/
+
+.icon {
+  font-size: 1em; 
+  transition: font-size 0.3s ease ; 
+}
+
+.nav-link:hover .icon {
+  font-size: 1.2em; 
+  color: red;
+}
+
+/*Cart*/
+
+@media (min-width: 1025px) {
+.h-custom {
+  height: 100vh !important;
+  padding: 10px;
+}
+}
+
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.15;
+padding-left: .75em;
+padding-right: .75em;
+}
+
+.card-registration .select-arrow {
+top: 13px;
+}
+
+.bg-grey {
+background-color: #eae8e8;
+}
+
+@media (min-width: 992px) {
+.card-registration-2 .bg-grey {
+border-top-right-radius: 16px;
+border-bottom-right-radius: 16px;
+}
+}
+
+@media (max-width: 991px) {
+.card-registration-2 .bg-grey {
+border-bottom-left-radius: 16px;
+border-bottom-right-radius: 16px;
+}
+}
+
+/*VALIDATION TEXT*/
+
+.error-text {
+  color: red;
+  font-size: 12px; 
+}
+
+/*NOTI*/
+
+.notification {
+  position: fixed;
+  top: -100px; 
+  right: 20px;
+  background-color: white;
+  color: #0e0d0d;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 9999;
+  transition: top 0.8s, opacity 0.8s; 
+}
+
+.notification.show {
+  top: 20px; 
+  display: block;
+}
+
+.notification.hide {
+  top: -100px; 
+  display: none;
+}
+
+.notification-bar {
+  height: 4px;
+  background-color: #171718; 
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  width: 100%;
+}
+
+.notification-bar-progress {
+  animation: progress 1.5s linear;
+}
+
+@keyframes progress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+/* menuStyles.css */
+.labelnew {
+  color: black;
+  padding: 30px 0px 0px 80px;
+  font-size: 24px; 
+}
+
+/* menuStyles.css */
+.ver-todo-link {
+  display: block;
+  margin-top: 20px; 
+  text-decoration: none;
+  color: rgb(218, 218, 224); 
+  font-size: 14px;
+
+}
+
+.ver-todo-link:hover {
+  text-decoration: underline;
+  color: rgb(215, 11, 11); 
+}
+
+/*PRODUCT DESCRIPTION*/
+
+.details {
+    display: flex;
+    justify-content: center; /* Centrado por defecto para móvil */
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px; /* Espacio entre imagen y texto */
+}
+
+.details .big-img {
+    flex: 1 1 400px; /* Permite que crezca y se encoja, base ideal 400px */
+    max-width: 600px; /* Controla que no se haga Gigante en monitores 4k */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.details .box {
+    flex: 1 1 300px; /* Base ideal 300px para la info */
+    max-width: 500px;
+    width: 100%;
+    margin: 0;
+}
+
+/* --- AJUSTES PARA ESCRITORIO (Pantallas grandes) --- */
+@media (min-width: 992px) {
+    .details {
+        justify-content: space-between; /* ¡Aquí está la magia! Los separa */
+        padding: 40px;
+        align-items: flex-start; /* Alinea el texto arriba junto a la imagen */
+    }
+
+    .app {
+        margin: 40px auto;
+        width: 100%; /* Recupera el ancho en PC */
+    }
+}
+
+/* --- AJUSTES PARA MÓVIL --- */
+@media (max-width: 768px) {
+    .details .big-img {
+        max-width: 100%;
+    }
+    
+    .box .row h2 {
+        font-size: 2.8rem !important;
+    }
+
+    .details {
+        gap: 10px;
+    }
+}
+
+.app {
+    max-width: 1200px;
+    width: 95%; /* Cambiado de 100% a 95% para que no toque los bordes en móvil */
+    margin: 20px auto; /* Menos margen arriba/abajo en móvil */
+    box-shadow: 0 0 5px #ccc;
+    background: #fff;
+}
+
+.big-img img {
+    width: 100%;
+    height: auto;   /* Que la altura sea proporcional */
+    max-height: 500px;
+    display: block;
+    object-fit: contain; /* 'contain' evita que se corte la imagen del producto */
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .app {
+        margin: 10px auto;
+        box-shadow: none; /* Opcional: quitar sombra en móvil para limpieza */
+    }
+    
+    .details {
+        padding: 15px;
+    }
+
+    .box .row h2 {
+        font-size: 1.8em !important; /* Reducir tamaño de título en móvil */
+    }
+}
+
+/*Product Name*/
+
+.product-title-detail {
+    font-size: 3rem;
+}
+
+@media (max-width: 500px) {
+    .product-title-detail {
+        font-size: 2.8rem;
+    }
+}
+
+.box .row{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.box .row h2{
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.box .row span{
+  color: crimson;
+}
+.box .colors button{
+  width: 30px;
+  height: 30px;
+  border: 1px solid #333;
+  outline: none;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.box p{
+  line-height: 1.5;
+  margin: 15px 0;
+}
+.thumb{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  cursor: pointer;
+  margin: 10px 0;
+}
+.thumb img{
+  width: 90px;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  margin-right: 5px;
+  opacity: 0.7;
+  border-radius: 5px;
+}
+.thumb img.active{
+  opacity: 1;
+  border: 1px solid lightseagreen;
+}
+.box .cart{
+  background: #333;
+  color: white;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 25px;
+  margin-top: 15px;
+}
+
+.color-button-detail,
+.size-button-detail {
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  transition: all 0.2s ease; 
+}
+
+.color-button-detail:hover,
+.size-button-detail:hover {
+  transform: scale(1.2); 
+  opacity: 0.3; 
+}
+
+.color-button-detail.selected,
+.size-button-detail.selected {
+  opacity: 1; 
+}
+
+@media (max-width: 500px){
+  .thumb{
+    height: 50px;
+  }
+  .thumb img{
+    width: 50px;
+  }
+}
+
+
+/*ARROW*/
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 5px; 
+}
+
+.asc::after {
+  content: '↑';
+  font-size: 1.2em;
+}
+
+.desc::after {
+  content: '↓';
+  font-size: 1.2em;
+}
+
+/*SOLD OUT*/
+
+.sold-out-badge {
+  position: absolute;
+  top: 120px; 
+  right: 0px; 
+  z-index: 1;
+  padding: 20px;
+  background-color: rgb(194, 23, 23);
+  color: rgb(245, 239, 239);
+  font-weight: bold;
+  border-radius: 6px 0px 0px 6px;
+}
+
+.my-card-img-container {
+  position: relative; 
+}
+
+.my-card-img.sold-out {
+  opacity: 0.7;
+}
+
+/*MENU MOBILE*/
+
+.custom-toggler-icon .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+}
+
+/* Opcional: Quitar el borde gris del botón */
+.custom-toggler-icon {
+    border-color: rgba(255, 255, 255, 0.5) !important; /* Un borde sutil blanco */
+}
+
+/*CARROUSEL*/
+
+/* Estilo para las imágenes del carrusel */
+
+.custom-carousel-img {
+    width: 100%;
+    /* Altura en móviles: esto lo hará ver más "cuadrado" */
+    height: 550px; 
+    object-fit: cover; /* Recorta los lados sin estirar la imagen */
+    object-position: center; /* Asegura que el centro de la imagen sea lo visible */
+    filter: brightness(0.7);
+}
+
+/* Altura en pantallas grandes (Desktop) */
+@media (min-width: 992px) {
+    .custom-carousel-img {
+        height: 600px; /* O la altura que prefieras para PC */
+    }
+}
+
+/* Estilo base del Navbar */
+.navbar-custom {
+    background-color: #000000 !important; /* Negro puro inicial */
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+    padding: 10px 0;
+}
+
+/* Efecto Vidrio Negro Transparente */
+/* Se activa cuando hay contenido detrás o puedes usar JS para cambiar la clase al bajar */
+.navbar-custom {
+    background-color: rgb(18, 18, 18) !important; /* Negro con 70% de opacidad */
+    backdrop-filter: blur(10px); /* El efecto de desenfoque/vidrio */
+    -webkit-backdrop-filter: blur(10px); /* Compatibilidad con Safari */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Línea sutil elegante */
+}
+
+/* Ajuste para que el contenido de la página no se oculte tras el navbar fixed */
+body {
+    padding-top: 70px; /* Ajusta según la altura de tu logo */
+}
+
+.navbar-custom.scrolled {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(15px);
+}
+
+/* Animación específica para el Texto */
+@keyframes text-glitch {
+  0% { transform: translate(0); text-shadow: none; }
+  20% { transform: translate(-1px, 1px); text-shadow: -1px 0 rgba(255,255,255,0.2), 1px 0 rgba(255,0,0,0.1); }
+  40% { transform: translate(-1px, -1px); text-shadow: 1px 0 rgba(255,255,255,0.2), -1px 0 rgba(0,255,255,0.1); }
+  60% { transform: translate(1px, 1px); text-shadow: -1px 0 rgba(255,255,255,0.2), 1px 0 rgba(255,0,0,0.1); }
+  80% { transform: translate(1px, -1px); text-shadow: 1px 0 rgba(255,255,255,0.2), -1px 0 rgba(0,255,255,0.1); }
+  100% { transform: translate(0); text-shadow: none; }
+}
+
+.glitch-text {
+  display: inline-block; /* Necesario para que el transform funcione */
+  animation: text-glitch 5s infinite; /* Un poco más lento que el ojo para que no sea molesto */
+  color: grey;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el mouse (opcional) */
+.glitch-text:hover {
+  color: white;
+  text-shadow: 0 0 8px rgba(255,255,255,0.5);
+  cursor: crosshair; /* Cambia el cursor por una cruz para estilo técnico */
+}
+
+/* CURSOR TÉCNICO GLOBAL */
+
+/* Se aplica a enlaces, botones, inputs de tipo botón y cualquier elemento con clase 'btn' */
+a, 
+button, 
+.btn, 
+input[type="button"], 
+input[type="submit"], 
+.nav-link, 
+.custom-button,
+[role="button"] {
+    cursor: crosshair !important;
+}
+
+/*TABLE*/
+
+.table td, 
+.table th,
+.table tbody td {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid #333 !important; /* Mantiene la línea técnica sutil */
+}
+
+/* --- ESTILOS PARA TÍTULO DE MÚSICA GIGANTE --- */
+
+/* Usamos una ruta de clases más larga para ganar prioridad */
+.my-card-music-list .card-body .music-title {
+    font-size: calc(1rem + 4vw) !important; /* Forzamos el tamaño gigante */
+    font-weight: 900 !important;
+    line-height: 0.85 !important;
+    text-transform: uppercase;
+    margin-bottom: 20px !important;
+    word-wrap: break-word !important;
+    hyphens: auto; /* Agrega guiones si el navegador lo soporta */
+    max-width: 70%;
+    
+    /* Liberamos las restricciones que tenías antes */
+    height: auto !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    display: block !important;
+}
+
+/* Ajuste para que el cuerpo de la tarjeta de música no limite el crecimiento */
+.my-card-music-list .card-body {
+    height: auto !important; 
+    min-height: 250px; /* Un mínimo para que respire */
+    display: flex;
+    flex-direction: column;
+}
