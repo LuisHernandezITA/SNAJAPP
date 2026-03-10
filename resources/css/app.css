@@ -1,7 +1,7 @@
 /*FULL APP*/
 
 html, body, #root {
-    background-color: rgb(14, 14, 14) !important;
+    background-color: rgb(255, 255, 255) !important;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -155,14 +155,14 @@ section, .container, .container-fluid {
 }
 
 .custom-button:hover {
-  background: linear-gradient(to bottom, #000, #333); 
+  background: linear-gradient(to bottom, #110cb2, #3ba4d8); 
   color: #fff; 
 }
 
 
 .custom-button.clicked {
   background: transparent; 
-  border: 2px solid #000; 
+  border: 2px solid #000000; 
 }
 
 .custom-button.clicked .mdb-icon {
@@ -192,7 +192,7 @@ section, .container, .container-fluid {
 
 .nav-link:hover .icon {
   font-size: 1.2em; 
-  color: red;
+  color: rgb(255, 128, 0);
 }
 
 /*Cart*/
@@ -299,14 +299,14 @@ border-bottom-right-radius: 16px;
   display: block;
   margin-top: 20px; 
   text-decoration: none;
-  color: rgb(218, 218, 224); 
+  color: rgb(14, 14, 14); 
   font-size: 14px;
 
 }
 
 .ver-todo-link:hover {
   text-decoration: underline;
-  color: rgb(215, 11, 11); 
+  color: rgb(38, 8, 159); 
 }
 
 /*PRODUCT DESCRIPTION*/
@@ -563,20 +563,20 @@ border-bottom-right-radius: 16px;
     }
 }
 
-/* Estilo base del Navbar */
 .navbar-custom {
-    background-color: #000000 !important; /* Negro puro inicial */
-    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+    /* Usamos background-image para el gradiente */
+    background-image: linear-gradient(to right, #110cb2, #0921bd) !important;
+    
+    /* Efecto Vidrio (necesita un poco de transparencia en el gradiente para notarse) */
+    /* Si quieres que se vea el blur, el gradiente debe tener opacidad (RGBA) */
+    background: linear-gradient(135deg, rgba(17, 12, 178, 0.8), rgba(53, 9, 196, 0.8)) !important;
+    
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    transition: all 0.4s ease;
     padding: 10px 0;
-}
-
-/* Efecto Vidrio Negro Transparente */
-/* Se activa cuando hay contenido detrás o puedes usar JS para cambiar la clase al bajar */
-.navbar-custom {
-    background-color: rgb(18, 18, 18) !important; /* Negro con 70% de opacidad */
-    backdrop-filter: blur(10px); /* El efecto de desenfoque/vidrio */
-    -webkit-backdrop-filter: blur(10px); /* Compatibilidad con Safari */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Línea sutil elegante */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Ajuste para que el contenido de la página no se oculte tras el navbar fixed */
@@ -585,7 +585,7 @@ body {
 }
 
 .navbar-custom.scrolled {
-    background-color: rgba(0, 0, 0, 0.7) !important;
+    background-color: rgba(38, 12, 208, 0.7) !important;
     backdrop-filter: blur(15px);
 }
 
@@ -632,7 +632,7 @@ input[type="submit"],
 .table td, 
 .table th,
 .table tbody td {
-    color: #ffffff !important;
+    color: #000000 !important;
     background-color: transparent !important;
     border-bottom: 1px solid #333 !important; /* Mantiene la línea técnica sutil */
 }

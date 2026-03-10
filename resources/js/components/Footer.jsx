@@ -11,7 +11,7 @@ function Footer() {
     return (
         <MDBFooter
             className="text-center text-lg-start text-white" // Cambiamos text-muted por text-white
-            style={{ backgroundColor: "rgb(18, 18, 18)" }} // Aplicamos tu color
+            style={{ backgroundColor: "rgb(20, 15, 163)" }} // Aplicamos tu color
         >
             {/* Sección de redes sociales con borde sutil */}
             <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom border-secondary">
@@ -46,7 +46,7 @@ function Footer() {
                             <h6 className="text-uppercase fw-bold mb-4">
                                 <img
                                     alt="Logo"
-                                    src="/img/logosmc.svg"
+                                    src="/img/acjuvenil.svg"
                                     width="120"
                                     height="60"
                                     className="d-inline-block align-top"

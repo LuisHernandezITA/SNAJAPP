@@ -99,9 +99,9 @@ function Menu() {
                     <Navbar.Brand as={Link} to="">
                         <img
                             alt="Logo"
-                            src="/img/logosmc.svg"
-                            width="150"
-                            height="45"
+                            src="/img/acjuvenil.png"
+                            width="130"
+                            height="55"
                             className="d-inline-block align-top logo"
                         />
                     </Navbar.Brand>
