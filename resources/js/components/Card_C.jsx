@@ -87,58 +87,71 @@ function Card_C(props) {
     };
 
     return (
-        <Card
-            className="my-card"
-            style={{
-                backgroundColor: "#111", // Gris casi negro para despegar del fondo puro
-            }}
-        >
-            <Link to={`/item/${id}`}>
-                <div className="my-card-img-container">
-                    {!available && (
-                        <div className="sold-out-badge">SOLD OUT</div>
-                    )}
-                    <Card.Img
-                        src={images}
-                        alt={firstName}
-                        className={`my-card-img ${
-                            !available ? "sold-out" : ""
-                        }`}
-                    />
+        <Card className="course-card-huge border-0 overflow-hidden">
+            <div className="row g-0 h-100">
+                {/* ÁREA DE IMAGEN/BANNER CON ENLACE */}
+                <div className="col-md-7 col-lg-8 position-relative">
+                    <Link to={`/item/${id}`} className="text-decoration-none">
+                        <div className="huge-card-img-container">
+                            {!available && (
+                                <div className="sold-out-badge">
+                                    CUPOS AGOTADOS
+                                </div>
+                            )}
+
+                            <Card.Img
+                                src={images}
+                                alt={firstName}
+                                className="huge-course-img"
+                            />
+
+                            {/* El degradado blanquecino */}
+                            <div className="huge-card-gradient-overlay"></div>
+
+                            {/* Opcional: Un pequeño icono de "ver más" que aparece al pasar el mouse */}
+                            <div className="view-details-icon">
+                                <MDBIcon fas icon="plus" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
-            </Link>
 
-            <Card.Body className="p-3" style={{ color: "#eee" }}>
-                <Card.Title>{firstName}</Card.Title>
+                <div className="col-md-5 col-lg-4 d-flex align-items-center bg-light-glass">
+                    {/* Cambiamos la clase a bg-light-glass */}
+                    <Card.Body className="p-4 p-lg-5">
+                        <div className="d-flex justify-content-between align-items-start mb-3">
+                            <h2 className="huge-course-title-dark">
+                                {firstName}
+                            </h2>
+                            <span className="huge-course-price-blue">
+                                ${price}
+                            </span>
+                        </div>
 
-                <Card.Subtitle
-                    className="mb-2 text-white-50 small"
-                    style={{ fontWeight: "300" }}
-                >
-                    {description}
-                </Card.Subtitle>
+                        <p className="huge-course-description-dark">
+                            {description}
+                        </p>
 
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                    <span>${price}</span>
-
-                    <MDBBtn
-                        class={`custom-button ${isButtonDisabled || !available ? "clicked" : ""}`}
-                        size="lg"
-                        className="mb-4 w-100"
-                        onClick={handleButtonClick}
-                        disabled={isButtonDisabled || !available}
-                    >
-                        <MDBIcon fas icon="shopping-cart" className="me-1" />
-                        {isButtonDisabled ? "" : "ADD"}
-                    </MDBBtn>
+                        <div className="mt-5">
+                            <MDBBtn
+                                className="huge-course-btn-blue"
+                                onClick={handleButtonClick}
+                            >
+                                <MDBIcon
+                                    fas
+                                    icon="graduation-cap"
+                                    className="me-2"
+                                />
+                                INSCRIBIRME AHORA
+                            </MDBBtn>
+                        </div>
+                    </Card.Body>
                 </div>
-            </Card.Body>
-
+            </div>
+            {/* Notificación (se mantiene igual) */}
             {notification && (
                 <div
-                    className={`notification ${
-                        notificationVisible ? "show" : ""
-                    }`}
+                    className={`notification ${notificationVisible ? "show" : ""}`}
                 >
                     {notification}
                     <div className="notification-bar"></div>

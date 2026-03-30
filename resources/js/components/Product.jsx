@@ -163,7 +163,14 @@ function Product() {
                     {!product.available && (
                         <div className="sold-out-badge">SOLD OUT</div>
                     )}
-                    <img src={product.images} alt="Producto" />
+                    <img
+                        src={
+                            product.images.startsWith("http")
+                                ? product.images
+                                : `/${product.images}`
+                        }
+                        alt={product.name}
+                    />
                 </div>
                 <div className="box">
                     <div className="row">
@@ -259,10 +266,6 @@ function Product() {
                         {isButtonDisabled ? null : "Add to Cart"}{" "}
                     </MDBBtn>
                 </div>
-            </div>
-            <div className="thumb">
-                <img src={product.images} alt="Thumbnail 1" />
-                <img src="URL_IMAGEN_THUMBNAIL_2" alt="Thumbnail 2" />
             </div>
             {/* SMALL IMAGE */}
             <img

@@ -82,24 +82,23 @@ function ListCard() {
 
     return (
         <div>
-            <br></br>
+            <br />
             <Navbar
                 expand="lg"
-                variant="dark" // Esto hace que el texto sea blanco/claro automáticamente
+                variant="dark"
                 style={{
-                    backgroundColor: "rgb(18, 18, 18)",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)", // Línea sutil inferior
+                    backgroundColor: "rgb(227, 89, 25)",
+                    borderBottom: "1px solid rgba(255,255,255,0.05)",
                 }}
-                className="shadow-sm py-3 w-100" // Añadimos una sombra sutil y un poco de padding
+                className="shadow-sm py-3 w-100"
             >
                 <Container className="px-4">
-                    {" "}
                     <Navbar.Toggle
                         aria-controls="basic-navbar-nav"
                         className="border-0 custom-toggler d-flex align-items-center"
                     >
                         <span
-                            className="glitch-text" // <--- Añadimos la clase aquí
+                            className="institutional-text"
                             style={{
                                 fontSize: "1.2rem",
                                 letterSpacing: "4px",
@@ -107,18 +106,16 @@ function ListCard() {
                                 fontWeight: "300",
                             }}
                         >
-                            STORE ♱༺༒︎⊰‿̩͙
+                            CURSOS
                         </span>
                     </Navbar.Toggle>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            {" "}
-                            {/* En Bootstrap 5 se usa 'me-auto' en lugar de 'mr-auto' */}
                             <Nav.Link
                                 onClick={() => handleCategoryChange(null)}
                                 className="text-uppercase small"
                             >
-                                All
+                                Todos
                             </Nav.Link>
                             {categories.map((category) => (
                                 <Nav.Link
@@ -133,8 +130,6 @@ function ListCard() {
                             ))}
                         </Nav>
                         <Nav className="ms-auto">
-                            {" "}
-                            {/* En Bootstrap 5 se usa 'ms-auto' en lugar de 'ml-auto' */}
                             <Nav.Link
                                 onClick={handleSortByPrice}
                                 className="small"
@@ -156,31 +151,27 @@ function ListCard() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <br></br>
+
+            {/* CONTENEDOR CORREGIDO: Igual a ListCardNewest */}
             <div
-                className="d-flex flex-wrap justify-content-center"
-                style={{ gap: "20px" }}
+                className="d-flex flex-wrap justify-content-center px-2"
+                style={{
+                    gap: "20px",
+                    padding: "40px 0",
+                    width: "100%" /* Quitamos el truco de 100vw para que se comporte igual que el Newest */,
+                }}
             >
                 {getFilteredProducts().map((product) => (
                     <div
                         key={product.id}
-                        className="card-wrapper"
-                        style={{
-                            margin: "10px", // Separación constante en todos los lados
-                        }}
+                        className="card-wrapper" /* Usamos la clase que te gusta de Newest */
+                        style={{ margin: "10px" }}
                     >
-                        <Card_C
-                            id={product.id}
-                            name={product.name}
-                            description={product.description}
-                            price={product.price}
-                            images={product.images}
-                            available={product.available}
-                        />
+                        <Card_C {...product} />
                     </div>
                 ))}
             </div>
-            <br></br>
+            <br />
         </div>
     );
 }
