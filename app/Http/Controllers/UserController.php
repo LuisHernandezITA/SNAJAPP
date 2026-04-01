@@ -4,84 +4,100 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listado de usuarios
      */
     public function index()
     {
-        $users = DB::table('users')->get();
-        return $users;
+        return response()->json(User::all(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Registro de nuevo usuario (Store)
      */
     public function store(Request $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), 
+        // 1. Validar los datos que vienen de React
+        $validator = Validator::make($request->all(), [
+            'full_name'    => 'required|string|max:255',
+            'email'        => 'required|string|email|max:255|unique:users',
+            'password'     => 'required|string|min:6',
+            'state'        => 'required|string',
+            'municipality' => 'required|string',
+            'phone_number' => 'nullable|string|max:20',
         ]);
-    
-        $user->save();
 
-        return $request;
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation Error',
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+        // 2. Crear el usuario con la nueva estructura
+        $user = User::create([
+            'full_name'    => $request->full_name,
+            'email'        => $request->email,
+            'password'     => Hash::make($request->password), // Encriptación vital
+            'state'        => $request->state,
+            'municipality' => $request->municipality,
+            'phone_number' => $request->phone_number,
+            'role'         => 0, // 0 = Juvenil por defecto
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User created successfully',
+            'user'    => $user
+        ], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar un usuario específico
      */
-    public function show(Request $request)
-    {
-        $user = User::where('id', $request->id) -> get();
+   public function show($id) {
+    $user = User::find($id);
+    if (!$user) {
+        return response()->json(['success' => false, 'message' => 'User not found'], 404);
+    }
+    return response()->json([
+        'success' => true,
+        'user' => $user // Aquí debe venir full_name, role, etc.
+    ]);
+}
 
-        if ($user) {
-            return $user;
-        } else {
+    /**
+     * Update: Ideal para cuando el OCR extraiga los datos después
+     */
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Aquí actualizamos los campos del OCR
+        $user->update($request->only([
+            'dob', 'address', 'section', 'voter_key', 
+            'curp', 'ocr_id', 'id_card_front', 'id_card_back'
+        ]));
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated with OCR data',
+            'user'    => $user
+        ]);
     }
 
     public function token(){
         return csrf_token();
     }
-
-    
 }

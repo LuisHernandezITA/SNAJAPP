@@ -7,26 +7,38 @@ import {
     MDBTabsContent,
     MDBTabsPane,
     MDBBtn,
-    MDBIcon,
     MDBInput,
-    MDBCheckbox,
+    MDBRow,
+    MDBCol,
 } from "mdb-react-ui-kit";
+import axios from "axios";
 import "/resources/css/app.css";
+import { useUser } from "./UserContext"; // Importamos el hook
+import { useNavigate } from "react-router-dom";
 
 function Login_B() {
-    //NOTIFICATIONS
-
+    const navigate = useNavigate();
+    const { authenticateUser } = useUser(); // Obtenemos la función para actualizar el estado global
     const [notification, setNotification] = useState(null);
     const [notificationVisible, setNotificationVisible] = useState(false);
+    const [justifyActive, setJustifyActive] = useState("tab1");
+    const [isButtonEnabled, setIsButtonEnabled] = useState(true);
+
+    const [formData, setFormData] = useState({
+        full_name: "",
+        email: "",
+        password: "",
+        c_password: "",
+        phone_number: "",
+        state: "",
+        municipality: "",
+    });
+
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (notificationVisible) {
-            const progressBar = document.querySelector(".notification-bar");
-            progressBar.classList.add("notification-bar-progress");
-
-            setTimeout(() => {
-                setNotificationVisible(false);
-            }, 1500);
+            setTimeout(() => setNotificationVisible(false), 3000);
         }
     }, [notificationVisible]);
 
@@ -35,166 +47,143 @@ function Login_B() {
         setNotificationVisible(true);
     };
 
-    //TABS
-
-    const [justifyActive, setJustifyActive] = useState("tab1");
-
     const handleJustifyClick = (value) => {
-        if (value === justifyActive) {
-            return;
-        }
-
-        setJustifyActive(value);
+        if (value !== justifyActive) setJustifyActive(value);
     };
-
-    //VALIDATIONS
-
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        c_password: "",
-    });
-
-    const [errors, setErrors] = useState({
-        name: "",
-        email: "",
-        password: "",
-        c_password: "",
-    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
 
-        const newErrors = { ...errors };
-
-        if (name === "name") {
-            newErrors[name] = value.trim() === "" ? "* Name is required" : "";
-        } else if (name === "email") {
-            newErrors[name] =
-                value.trim() === ""
-                    ? "* Email is required"
-                    : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-                      ? "* Invalid email address"
-                      : "";
-        } else if (name === "password") {
-            newErrors[name] =
-                value.trim() === "" ? "* Password is required" : "";
-        } else if (name === "c_password") {
-            newErrors[name] =
-                value.trim() === ""
-                    ? "* Confirm Password is required"
-                    : value !== formData.password
-                      ? "* Passwords do not match"
-                      : "";
+        let errorMsg = "";
+        if (value.trim() === "") {
+            errorMsg = `* Este campo es requerido`;
         }
 
-        setErrors(newErrors);
+        if (
+            name === "email" &&
+            value !== "" &&
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
+        ) {
+            errorMsg = "* Email inválido";
+        }
+
+        if (name === "c_password" && value !== formData.password) {
+            errorMsg = "* Las contraseñas no coinciden";
+        }
+
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
     };
 
-    const isFormValid =
-        Object.values(errors).every((error) => error === "") &&
-        Object.values(formData).every((value) => value.trim() !== "");
-
-    const [isButtonEnabled, setIsButtonEnabled] = useState(true);
-
-    const handleButtonClick = () => {
-        setIsButtonEnabled(false);
+    const isRegisterValid = () => {
+        return (
+            formData.full_name &&
+            formData.email &&
+            formData.password &&
+            formData.c_password === formData.password &&
+            formData.state &&
+            formData.municipality &&
+            Object.values(errors).every((err) => err === "" || err === null)
+        );
     };
 
-    //LOGIN
+    const isLoginValid = () => {
+        return (
+            formData.email &&
+            formData.password &&
+            !errors.email &&
+            !errors.password
+        );
+    };
 
+    // --- MANEJADOR DE LOGIN MODIFICADO ---
     const handleLogin = async (e) => {
         e.preventDefault();
-        setIsButtonEnabled(false); // Deshabilitar al empezar
-
-        const loginData = {
-            email: formData.email,
-            password: formData.password,
-        };
+        setIsButtonEnabled(false);
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await axios.post(
+                "http://127.0.0.1:8000/api/login",
+                {
+                    email: formData.email,
+                    password: formData.password,
                 },
-                body: JSON.stringify(loginData), // Enviamos loginData, no formData
-            });
+            );
 
-            if (response.ok) {
-                const data = await response.json();
+            const data = response.data;
 
-                const { success, message, user } = data;
+            if (data.success) {
+                const userId = data.user.id || data.user.user_id; // Intentamos ambas por si acaso
+                const token = data.user.token;
 
-                showNotification(message);
-
-                if (success) {
-                    //console.log("User data:", user);
-                    document.cookie = `user_id=${user.user_id}; path=/`;
-
-                    axios.defaults.headers.common["Authorization"] =
-                        `Bearer ${user.token}`;
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, 1500);
+                if (!userId || !token) {
+                    console.error(
+                        "Error: ID o Token ausentes en la respuesta",
+                        data,
+                    );
+                    return;
                 }
+
+                // Guardar con expiración clara
+                document.cookie = `user_id=${userId}; path=/; max-age=86400`;
+                localStorage.setItem("token", token);
+
+                axios.defaults.headers.common["Authorization"] =
+                    `Bearer ${token}`;
+
+                // Pasamos el ID directamente para no esperar a la cookie
+                await authenticateUser(userId);
+
+                showNotification("¡Bienvenido!");
+                navigate("/");
             } else {
-                showNotification("Login error. Verify your data.");
-                setIsButtonEnabled(true); // <--- REACTIVAR AQUÍ
-                setTimeout(() => {
-                    window.location.href = "/Login_B";
-                }, 1500);
+                showNotification(data.message || "Credenciales incorrectas");
+                setIsButtonEnabled(true);
             }
         } catch (error) {
-            console.error("ERROR DETALLADO:", error); // <-- AGREGA ESTO
-            showNotification("Network Error.");
+            console.error("Login error:", error);
+            const msg = error.response?.data?.message || "Error de conexión";
+            showNotification(msg);
             setIsButtonEnabled(true);
         }
     };
 
-    //REGISTER
-
     const handleRegister = async (e) => {
         e.preventDefault();
-
         try {
             const response = await fetch("http://127.0.0.1:8000/api/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Accept: "application/json",
                 },
                 body: JSON.stringify(formData),
             });
 
+            const data = await response.json();
+
             if (response.ok) {
-                showNotification("User registered successfully");
-                setTimeout(() => {
-                    window.location.href = "/Login_B";
-                }, 1500);
+                showNotification("¡Registro exitoso! Por favor inicia sesión.");
+                setJustifyActive("tab1");
             } else {
-                showNotification("Register error. Verify your data.");
-                /*setTimeout(() => {
-                    window.location.href = "/Login_B";
-                }, 1500);*/
+                if (data.errors) {
+                    const firstError = Object.values(data.errors)[0][0];
+                    showNotification(firstError);
+                } else {
+                    showNotification(data.message || "Error en el registro");
+                }
             }
         } catch (error) {
-            showNotification("Network Error.");
-            setTimeout(() => {
-                window.location.href = "/Login_B";
-            }, 1500);
+            showNotification("Error de red.");
         }
     };
 
     return (
-        <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
-            <MDBTabs
-                pills
-                justify
-                className="mb-3 d-flex flex-row justify-content-between"
-            >
+        <MDBContainer
+            className="p-3 my-5 d-flex flex-column w-50"
+            style={{ minWidth: "350px" }}
+        >
+            <MDBTabs pills justify className="mb-3">
                 <MDBTabsItem>
                     <MDBTabsLink
                         onClick={() => handleJustifyClick("tab1")}
@@ -214,137 +203,120 @@ function Login_B() {
             </MDBTabs>
 
             <MDBTabsContent>
+                {/* LOGIN */}
                 <MDBTabsPane show={justifyActive === "tab1"}>
                     <form onSubmit={handleLogin}>
-                        {errors.email && (
-                            <p className="error-text">{errors.email}</p>
-                        )}
                         <MDBInput
                             wrapperClass="mb-4"
                             label="Email"
-                            id="email"
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                         />
-                        {errors.password && (
-                            <p className="error-text">{errors.password}</p>
-                        )}
                         <MDBInput
                             wrapperClass="mb-4"
                             label="Password"
-                            id="password"
                             type="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                         />
-
-                        <div className="d-flex justify-content-between mx-4 mb-4">
-                            <MDBCheckbox
-                                name="flexCheck"
-                                value=""
-                                id="flexCheckDefault"
-                                label="Remember me"
-                            />
-                            <a href="!#">Forgot password?</a>
-                        </div>
-
                         <MDBBtn
-                            class={`custom-button ${
-                                !isButtonEnabled ? "clicked" : ""
-                            }`}
-                            size="lg"
                             className="mb-4 w-100"
                             type="submit"
-                            disabled={!isButtonEnabled}
-                            //onClick={handleButtonClick}
+                            disabled={!isLoginValid() || !isButtonEnabled}
                         >
                             Sign in
                         </MDBBtn>
-                        <p className="text-center">
-                            Not a member?{" "}
-                            <a
-                                href="#!"
-                                onClick={() => handleJustifyClick("tab2")}
-                                active={justifyActive === "tab2"}
-                            >
-                                Register
-                            </a>
-                        </p>
                     </form>
                 </MDBTabsPane>
 
+                {/* REGISTER */}
                 <MDBTabsPane show={justifyActive === "tab2"}>
                     <form onSubmit={handleRegister}>
-                        {errors.name && (
-                            <p className="error-text">{errors.name}</p>
-                        )}
                         <MDBInput
-                            wrapperClass="mb-4"
-                            label="Name"
-                            id="name"
+                            wrapperClass="mb-3"
+                            label="Full Name"
                             type="text"
-                            name="name"
-                            value={formData.name}
+                            name="full_name"
                             onChange={handleChange}
                         />
-                        {errors.email && (
-                            <p className="error-text">{errors.email}</p>
-                        )}
+                        <MDBRow>
+                            <MDBCol>
+                                <MDBInput
+                                    wrapperClass="mb-3"
+                                    label="Email"
+                                    type="email"
+                                    name="email"
+                                    onChange={handleChange}
+                                />
+                            </MDBCol>
+                            <MDBCol>
+                                <MDBInput
+                                    wrapperClass="mb-3"
+                                    label="Phone"
+                                    type="text"
+                                    name="phone_number"
+                                    onChange={handleChange}
+                                />
+                            </MDBCol>
+                        </MDBRow>
+                        <MDBRow>
+                            <MDBCol>
+                                <MDBInput
+                                    wrapperClass="mb-3"
+                                    label="State"
+                                    type="text"
+                                    name="state"
+                                    onChange={handleChange}
+                                />
+                            </MDBCol>
+                            <MDBCol>
+                                <MDBInput
+                                    wrapperClass="mb-3"
+                                    label="Municipality"
+                                    type="text"
+                                    name="municipality"
+                                    onChange={handleChange}
+                                />
+                            </MDBCol>
+                        </MDBRow>
                         <MDBInput
-                            wrapperClass="mb-4"
-                            label="Email"
-                            id="email"
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                        {errors.password && (
-                            <p className="error-text">{errors.password}</p>
-                        )}
-
-                        <MDBInput
-                            wrapperClass="mb-4"
+                            wrapperClass="mb-3"
                             label="Password"
-                            id="password"
                             type="password"
                             name="password"
-                            value={formData.password}
                             onChange={handleChange}
                         />
-                        {errors.c_password && (
-                            <p className="error-text">{errors.c_password}</p>
-                        )}
                         <MDBInput
                             wrapperClass="mb-4"
                             label="Confirm Password"
-                            id="c_password"
                             type="password"
                             name="c_password"
-                            value={formData.c_password}
                             onChange={handleChange}
                         />
 
+                        {errors.c_password && (
+                            <p className="text-danger small">
+                                {errors.c_password}
+                            </p>
+                        )}
+
                         <MDBBtn
-                            class={`custom-button`}
-                            size="lg"
                             className="mb-4 w-100"
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isRegisterValid()}
                         >
                             Sign up
                         </MDBBtn>
                     </form>
                 </MDBTabsPane>
             </MDBTabsContent>
+
             {notification && (
                 <div
-                    className={`notification ${
-                        notificationVisible ? "show" : ""
-                    }`}
+                    className={`notification ${notificationVisible ? "show" : ""}`}
                 >
                     {notification}
                     <div className="notification-bar"></div>

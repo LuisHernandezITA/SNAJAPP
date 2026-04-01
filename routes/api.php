@@ -51,7 +51,7 @@ Route::post('/getProductColors', [ProductColorsController::class, 'getProductCol
 Route::middleware(['auth:api'])->group(function () {
     
     // Perfil de usuario y Tokens de sesión
-    Route::post('/user_show', [UserController::class, 'show']);
+    Route::get('/user_show/{id}', [UserController::class, 'show']);
     Route::get('/accesstokens_index', [AccessTokensController::class, 'index']);
     Route::delete('/accesstokens/destroy', [AccessTokensController::class, 'destroy']);
 

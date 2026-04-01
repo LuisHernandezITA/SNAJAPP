@@ -14,9 +14,11 @@ import ListCardNewest from "./ListCardNewest";
 function Menu() {
     const location = useLocation();
     const [showCarousel, setShowCarousel] = useState(true);
-    const { userInfo } = useUser(); // Obtén la información del usuario desde el contexto.
-    const userName = userInfo ? userInfo.name : ""; // Obtén el nombre del usuario desde el contexto.
-    const userAdmin = userInfo ? userInfo.admin : "";
+    const { userInfo, setUserInfo } = useUser();
+    console.log("¿Qué hay en userInfo?", userInfo); // Obtén la información del usuario desde el contexto.
+    const userDetails = userInfo?.user || userInfo; // Si userInfo ya es el usuario, lo usa; si no, busca .user
+    const userName = userDetails?.full_name || userDetails?.name || "";
+    const userAdmin = Number(userDetails?.role) === 1;
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -54,14 +56,19 @@ function Menu() {
     };
 
     const handleLogout = () => {
+        // 1. Borrar cookie
         document.cookie =
             "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
+        // 2. Limpiar el estado global
+        setUserInfo(null);
+
         showNotification("Sesión cerrada exitosamente");
 
+        // 3. Redirigir (con un pequeño delay para que vean la notificación)
         setTimeout(() => {
             window.location.href = "/";
-        }, 1500);
+        }, 1000);
     };
 
     const hideListCardNewest =

@@ -15,8 +15,8 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
 {
-    // Verificamos si el usuario autenticado tiene el campo admin en 1 (o true)
-    if (auth()->user() && auth()->user()->admin == 1) {
+    // Cambiamos 'admin' por 'role' para que coincida con tu lógica de 3 roles
+    if (auth()->check() && auth()->user()->role == 1) {
         return $next($request);
     }
 
