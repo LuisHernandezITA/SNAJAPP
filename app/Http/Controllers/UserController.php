@@ -64,12 +64,12 @@ class UserController extends Controller
      */
    public function show($id) {
     $user = User::find($id);
-    if (!$user) {
-        return response()->json(['success' => false, 'message' => 'User not found'], 404);
-    }
+    // Creamos un token nuevo en cada 'show' (hidratación)
+    $token = $user->createToken('Personal Access Token')->accessToken; 
+    
     return response()->json([
-        'success' => true,
-        'user' => $user // Aquí debe venir full_name, role, etc.
+        'user' => $user,
+        'token' => $token
     ]);
 }
 

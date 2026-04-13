@@ -113,25 +113,18 @@ function Login_B() {
             const data = response.data;
 
             if (data.success) {
-                const userId = data.user.id || data.user.user_id; // Intentamos ambas por si acaso
+                const userId = data.user.id || data.user.user_id;
                 const token = data.user.token;
 
-                if (!userId || !token) {
-                    console.error(
-                        "Error: ID o Token ausentes en la respuesta",
-                        data,
-                    );
-                    return;
-                }
-
-                // Guardar con expiración clara
+                // 1. Guardar datos físicos
                 document.cookie = `user_id=${userId}; path=/; max-age=86400`;
                 localStorage.setItem("token", token);
 
+                // 2. IMPORTANTE: Configurar Axios inmediatamente
                 axios.defaults.headers.common["Authorization"] =
                     `Bearer ${token}`;
 
-                // Pasamos el ID directamente para no esperar a la cookie
+                // 3. Actualizar estado global
                 await authenticateUser(userId);
 
                 showNotification("¡Bienvenido!");

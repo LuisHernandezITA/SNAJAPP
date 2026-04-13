@@ -23,45 +23,36 @@ export const UserProvider = ({ children }) => {
     };
 
     const authenticateUser = useCallback(async (passedId = null) => {
-        setLoading(true);
+        const user_id = passedId || getCookie("user_id");
+
+        if (!user_id || user_id === "undefined") {
+            setLoading(false);
+            return;
+        }
+
         try {
-            // Si no nos pasan un ID, lo buscamos en la cookie
-            const user_id = passedId || getCookie("user_id");
-            const token = localStorage.getItem("token");
+            // 1. Pedimos los datos y UN TOKEN NUEVO usando solo el ID
+            // Esta ruta DEBE ser pública en api.php o no funcionará el refresco
+            const response = await axios.get(
+                `http://127.0.0.1:8000/api/user_show/${user_id}`,
+            );
+            const data = response.data.user || response.data;
+            const newToken = response.data.token;
 
-            // Solo hacemos la petición si hay un ID válido
-            if (
-                user_id &&
-                user_id !== "undefined" &&
-                user_id !== "null" &&
-                token
-            ) {
+            if (newToken) {
+                // 2. Inyectamos EL NUEVO TOKEN en Axios para las siguientes peticiones
+                // (Carrito, Admin, etc.)
                 axios.defaults.headers.common["Authorization"] =
-                    `Bearer ${token}`;
-
-                // Usamos la URL completa para evitar problemas de rutas relativas
-                const response = await axios.get(
-                    `http://127.0.0.1:8000/api/user_show/${user_id}`,
-                );
-
-                const data = Array.isArray(response.data)
-                    ? response.data[0]
-                    : response.data;
+                    `Bearer ${newToken}`;
 
                 setUserInfo({
                     ...data,
-                    token: token,
                     role: Number(data.role),
+                    token: newToken,
                 });
             }
         } catch (error) {
-            console.error("Auth error:", error);
-            if (
-                error.response?.status === 401 ||
-                error.response?.status === 403
-            ) {
-                logout();
-            }
+            console.error("Error regenerando token:", error);
         } finally {
             setLoading(false);
         }

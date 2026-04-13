@@ -17,8 +17,8 @@ function Menu() {
     const { userInfo, setUserInfo } = useUser();
     console.log("¿Qué hay en userInfo?", userInfo); // Obtén la información del usuario desde el contexto.
     const userDetails = userInfo?.user || userInfo; // Si userInfo ya es el usuario, lo usa; si no, busca .user
-    const userName = userDetails?.full_name || userDetails?.name || "";
-    const userAdmin = Number(userDetails?.role) === 1;
+    const userAdmin = Number(userInfo?.role) === 1;
+    const userName = userInfo?.full_name || userInfo?.name || "";
 
     const [scrolled, setScrolled] = useState(false);
 

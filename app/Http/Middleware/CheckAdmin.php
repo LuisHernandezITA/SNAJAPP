@@ -15,11 +15,16 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
 {
-    // Cambiamos 'admin' por 'role' para que coincida con tu lógica de 3 roles
-    if (auth()->check() && auth()->user()->role == 1) {
-        return $next($request);
+    // Verificamos si el usuario está autenticado por API
+    if (auth()->guard('api')->check()) {
+        $user = auth()->guard('api')->user();
+        
+        // Solo el role 1 (Admin) puede pasar a estas rutas
+        if ($user->role == 1) {
+            return $next($request);
+        }
     }
 
-    return response()->json(['message' => 'No tienes permisos de administrador.'], 403);
+    return response()->json(['message' => 'Acceso denegado: Se requieren permisos de administrador.'], 403);
 }
 }
