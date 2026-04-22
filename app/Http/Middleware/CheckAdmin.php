@@ -13,18 +13,22 @@ class CheckAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
 {
-    // Verificamos si el usuario está autenticado por API
-    if (auth()->guard('api')->check()) {
-        $user = auth()->guard('api')->user();
-        
-        // Solo el role 1 (Admin) puede pasar a estas rutas
-        if ($user->role == 1) {
-            return $next($request);
-        }
+    // Forzamos el guard de API para que use el Token que envía React
+    $user = auth()->guard('api')->user();
+
+    // Verificamos: ¿Existe? y ¿Su rol es 1? (usamos int para evitar fallos de tipo)
+    if ($user && (int)$user->role === 1) {
+        return $next($request);
     }
 
-    return response()->json(['message' => 'Acceso denegado: Se requieren permisos de administrador.'], 403);
+    return response()->json([
+        'message' => 'Acceso denegado. Se requiere rol de administrador.',
+        'debug' => [
+            'identificado' => (bool)$user,
+            'rol_encontrado' => $user ? $user->role : 'nulo'
+        ]
+    ], 403);
 }
 }

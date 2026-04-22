@@ -12,13 +12,19 @@ import { useUser } from "./UserContext";
 import ListCardNewest from "./ListCardNewest";
 
 function Menu() {
+    const { userInfo, loading, logout } = useUser();
     const location = useLocation();
+
+    // Simplificación total de la detección
+    const userDetails = userInfo?.user || userInfo;
+    const userAdmin = userInfo && Number(userDetails?.role) === 1;
+    const userName = userDetails?.full_name || userDetails?.name || "";
+
+    // Si está cargando la autenticación, podrías mostrar un spinner o nada
+    if (loading) return null;
+
     const [showCarousel, setShowCarousel] = useState(true);
-    const { userInfo, setUserInfo } = useUser();
     console.log("¿Qué hay en userInfo?", userInfo); // Obtén la información del usuario desde el contexto.
-    const userDetails = userInfo?.user || userInfo; // Si userInfo ya es el usuario, lo usa; si no, busca .user
-    const userAdmin = Number(userInfo?.role) === 1;
-    const userName = userInfo?.full_name || userInfo?.name || "";
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -56,16 +62,12 @@ function Menu() {
     };
 
     const handleLogout = () => {
-        // 1. Borrar cookie
-        document.cookie =
-            "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // 2. Llama a la función logout del contexto (ella ya borra cookies y limpia userInfo)
+        logout();
 
-        // 2. Limpiar el estado global
-        setUserInfo(null);
-
+        // 3. Notificación y redirección
         showNotification("Sesión cerrada exitosamente");
 
-        // 3. Redirigir (con un pequeño delay para que vean la notificación)
         setTimeout(() => {
             window.location.href = "/";
         }, 1000);
@@ -90,6 +92,8 @@ function Menu() {
             setShowCarousel(true);
         }
     }, [location]);
+
+    console.log("¿Es Admin?", userAdmin, "Rol actual:", userDetails?.role);
 
     return (
         <>
@@ -146,13 +150,13 @@ function Menu() {
 
                             {/* ENLACES GENERALES */}
                             <Nav.Link as={Link} to="">
-                                Home
+                                Inicio
                             </Nav.Link>
                             <Nav.Link as={Link} to="music">
-                                Music
+                                Normatividad
                             </Nav.Link>
                             <Nav.Link as={Link} to="store">
-                                Store
+                                Cursos
                             </Nav.Link>
 
                             {/* ICONOS DE ACCIÓN (LOGIN/LOGOUT Y CARRITO) */}

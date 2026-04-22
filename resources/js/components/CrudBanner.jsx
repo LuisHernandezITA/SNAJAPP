@@ -22,13 +22,21 @@ import { useUser } from "./UserContext";
 
 function CrudBanner() {
     const { userInfo } = useUser();
-    const userAdmin = userInfo ? userInfo.admin : "";
+
+    // 1. Obtenemos los detalles (manejando si vienen anidados o no)
+    const userDetails = userInfo?.user || userInfo;
+
+    // 2. Validamos el ROL (que es lo que realmente tienes en la DB)
+    // Si el rol es 1, es admin.
+    const userAdmin = userInfo && Number(userDetails?.role) === 1;
 
     if (!userAdmin) {
+        // Si no es admin, o userInfo es null, redirigimos
         return <Navigate to="/" />;
     }
 
-    const accessToken = userInfo ? userInfo.token : "";
+    // 3. Obtenemos el token del lugar correcto
+    const accessToken = userInfo?.token || "";
 
     const [search, setSearch] = useState("");
     const [banners, setBanners] = useState([]);

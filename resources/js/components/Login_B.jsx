@@ -116,19 +116,20 @@ function Login_B() {
                 const userId = data.user.id || data.user.user_id;
                 const token = data.user.token;
 
-                // 1. Guardar datos físicos
                 document.cookie = `user_id=${userId}; path=/; max-age=86400`;
                 localStorage.setItem("token", token);
-
-                // 2. IMPORTANTE: Configurar Axios inmediatamente
                 axios.defaults.headers.common["Authorization"] =
                     `Bearer ${token}`;
 
-                // 3. Actualizar estado global
                 await authenticateUser(userId);
 
+                // Mostramos la notificación
                 showNotification("¡Bienvenido!");
-                navigate("/");
+
+                // Esperamos 1.5 segundos antes de navegar para que el usuario lea el mensaje
+                setTimeout(() => {
+                    navigate("/");
+                }, 1500);
             } else {
                 showNotification(data.message || "Credenciales incorrectas");
                 setIsButtonEnabled(true);
