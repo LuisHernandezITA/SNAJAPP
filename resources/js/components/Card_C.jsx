@@ -46,9 +46,7 @@ function Card_C(props) {
 
     const handleButtonClick = () => {
         if (!userId) {
-            showNotification(
-                "You need to sign in to add products to the cart.",
-            );
+            showNotification("Necesitas iniciar sesión para registrarte.");
             setIsButtonDisabled(true);
             return;
         }
@@ -71,7 +69,7 @@ function Card_C(props) {
             })
             .then((response) => {
                 console.log("Respuesta del servidor:", response.data);
-                showNotification("Product added to Cart!");
+                showNotification("Registro a Curso Exitoso!");
 
                 // Opcional: Si quieres que el usuario pueda seguir añadiendo,
                 // no deshabilites el botón o usa un temporizador.
@@ -79,7 +77,7 @@ function Card_C(props) {
             })
             .catch((error) => {
                 console.error("Error adding product to cart:", error);
-                showNotification("Error adding product to cart!");
+                showNotification("Error al Añadir el Curso!");
                 setIsButtonDisabled(false);
             });
 

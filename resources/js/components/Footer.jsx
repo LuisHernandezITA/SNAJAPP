@@ -11,7 +11,10 @@ function Footer() {
     return (
         <MDBFooter
             className="text-center text-lg-start text-white" // Cambiamos text-muted por text-white
-            style={{ backgroundColor: "rgb(20, 15, 163)" }} // Aplicamos tu color
+            style={{
+                background:
+                    "linear-gradient(135deg, rgb(244, 97, 18) 0%, rgb(234, 29, 46) 100%)",
+            }} // Aplicamos tu color
         >
             {/* Sección de redes sociales con borde sutil */}
             <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom border-secondary">

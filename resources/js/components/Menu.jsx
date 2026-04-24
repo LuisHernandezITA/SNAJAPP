@@ -129,54 +129,49 @@ function Menu() {
                             {userName ? (
                                 userAdmin ? (
                                     <>
-                                        <Nav.Link>{userName} Mode</Nav.Link>
                                         <Nav.Link as={Link} to="songs">
-                                            Songs
+                                            ENLACES
                                         </Nav.Link>
                                         <Nav.Link as={Link} to="banners">
-                                            Banners
+                                            BANNERS
                                         </Nav.Link>
                                         <Nav.Link as={Link} to="categories">
-                                            Categories
+                                            CATEGORIAS
                                         </Nav.Link>
                                         <Nav.Link as={Link} to="products">
-                                            Products
+                                            CURSOS
                                         </Nav.Link>
                                     </>
                                 ) : (
-                                    <Nav.Link>Hi, {userName}</Nav.Link>
+                                    <Nav.Link>Hola, {userName}</Nav.Link>
                                 )
                             ) : null}
 
                             {/* ENLACES GENERALES */}
                             <Nav.Link as={Link} to="">
-                                Inicio
+                                INICIO
                             </Nav.Link>
                             <Nav.Link as={Link} to="music">
-                                Normatividad
+                                NORMATIVIDAD
                             </Nav.Link>
                             <Nav.Link as={Link} to="store">
-                                Cursos
+                                CURSOS
                             </Nav.Link>
 
                             {/* ICONOS DE ACCIÓN (LOGIN/LOGOUT Y CARRITO) */}
 
                             <div className="d-flex align-items-center gap-3 px-3">
-                                <Nav.Link
-                                    as={Link}
-                                    to="cart"
-                                    title="Shopping Cart"
-                                >
+                                <Nav.Link as={Link} to="cart" title="Cursos">
                                     <MDBIcon
                                         fas
-                                        icon="shopping-cart"
+                                        icon="graduation-cap"
                                         className="icon"
                                     />
                                 </Nav.Link>
                                 {userName ? (
                                     <Nav.Link
                                         onClick={handleLogout}
-                                        title="Logout"
+                                        title="Cerrar Sesión"
                                     >
                                         <MDBIcon
                                             fas
@@ -188,7 +183,7 @@ function Menu() {
                                     <Nav.Link
                                         as={Link}
                                         to="login"
-                                        title="Login"
+                                        title="Iniciar Sesión"
                                     >
                                         <MDBIcon
                                             fas
@@ -218,8 +213,12 @@ function Menu() {
             {!hideListCardNewest && showCarousel && (
                 <div className="text-center mb-5">
                     {" "}
-                    <Link to="/store" className="ver-todo-link">
-                        SEE ALL <i className="fas fa-eye"></i>
+                    <Link
+                        to="/store"
+                        className="ver-todo-link"
+                        style={{ color: "white", textDecoration: "none" }}
+                    >
+                        VER MÁS
                     </Link>
                 </div>
             )}{" "}

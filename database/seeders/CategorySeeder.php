@@ -14,18 +14,18 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $category = new Category();
-        $category->name = "T-Shirts";
-        $category->description = "Short-sleeved, casual garment, typically made of cotton or a cotton blend, with a T-shaped body and no collar. It's a popular clothing item known for its comfort, versatility, and wide range of styles, making it a great choice for personal expression and everyday wear";
+        $category->name = "Líderes Juveniles";
+        $category->description = "Programas diseñados para potenciar las habilidades de liderazgo en jóvenes, basados en los valores del humanismo político y el compromiso social.";
         $category->save();
 
         $category = new Category();
-        $category->name = "Caps";
-        $category->description = "A headwear accessory with a rounded crown and visor, providing sun protection and style.";
+        $category->name = "Capacitación";
+        $category->description = "Cursos técnicos y formativos orientados a la profesionalización de competencias integrales y el desarrollo de habilidades para la vida institucional.";
         $category->save();
 
         $category = new Category();
-        $category->name = "Pants";
-        $category->description = "Lower-body garments covering waist to ankles, available in various styles for fashion and function";
+        $category->name = "Convocatoria";
+        $category->description = "Espacios de participación y selección para proyectos especiales, voluntariados internacionales y programas de formación de alto impacto.";
         $category->save();
 
         $category = new Category();

@@ -87,7 +87,8 @@ function ListCard() {
                 expand="lg"
                 variant="dark"
                 style={{
-                    backgroundColor: "rgb(227, 89, 25)",
+                    background:
+                        "linear-gradient(135deg, rgb(244, 97, 18) 0%, rgb(234, 29, 46) 100%)",
                     borderBottom: "1px solid rgba(255,255,255,0.05)",
                 }}
                 className="shadow-sm py-3 w-100"
@@ -164,7 +165,8 @@ function ListCard() {
                 {getFilteredProducts().map((product) => (
                     <div
                         key={product.id}
-                        className="card-wrapper" /* Usamos la clase que te gusta de Newest */
+                        className="card-wrapper hover-lift"
+                        /* Usamos la clase que te gusta de Newest */
                         style={{ margin: "10px" }}
                     >
                         <Card_C {...product} />

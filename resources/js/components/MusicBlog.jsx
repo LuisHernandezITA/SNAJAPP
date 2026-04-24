@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Spinner, Navbar, Nav, Container, Row, Col } from "react-bootstrap";
+import {
+    Spinner,
+    Navbar,
+    Nav,
+    Container,
+    Form,
+    InputGroup,
+} from "react-bootstrap";
 import axios from "axios";
 import CardMusic from "./CardMusic";
+import { MDBIcon } from "mdb-react-ui-kit";
 import "/resources/css/app.css";
 
 function MusicBlog() {
     const [musicData, setMusicData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // --- ESTADOS PARA PAGINACIÓN ---
+    // --- ESTADOS PARA BÚSQUEDA Y PAGINACIÓN ---
+    const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
@@ -18,7 +27,6 @@ function MusicBlog() {
                 const response = await axios.get(
                     "http://127.0.0.1:8000/api/music_index",
                 );
-                // Invertimos la data para que los últimos registros (IDs más altos) salgan primero
                 setMusicData(response.data.reverse());
                 setLoading(false);
             } catch (error) {
@@ -29,15 +37,32 @@ function MusicBlog() {
         fetchMusic();
     }, []);
 
-    // --- LÓGICA DE PAGINACIÓN ---
+    // --- LÓGICA DE FILTRADO ---
+    const filteredItems = musicData.filter((track) => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            track.nombre.toLowerCase().includes(searchLower) ||
+            track.artista.toLowerCase().includes(searchLower) ||
+            (track.etiqueta &&
+                track.etiqueta.toLowerCase().includes(searchLower))
+        );
+    });
+
+    // --- LÓGICA DE PAGINACIÓN (Basada en los items filtrados) ---
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = musicData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(musicData.length / itemsPerPage);
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
         window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    // Manejar el cambio en el buscador y resetear a la página 1
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
     };
 
     if (loading) {
@@ -47,7 +72,7 @@ function MusicBlog() {
                 style={{ height: "100vh" }}
             >
                 <Spinner animation="border" role="status" variant="light">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">Cargando archivo...</span>
                 </Spinner>
             </div>
         );
@@ -60,78 +85,99 @@ function MusicBlog() {
                 expand="lg"
                 variant="dark"
                 style={{
-                    backgroundColor: "rgb(18, 18, 18)",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    background:
+                        "linear-gradient(135deg, rgb(18, 37, 244) 0%, rgb(29, 149, 234) 100%)",
+                    borderBottom: "1px solid rgba(235, 199, 199, 0.1)",
                 }}
-                className="shadow-sm py-3 w-100"
+                className="shadow-sm py-3 w-100 sticky-top"
             >
                 <Container className="px-4">
-                    <div className="d-flex align-items-center">
-                        <span
-                            className="glitch-text"
-                            style={{
-                                fontSize: "1.2rem",
-                                letterSpacing: "4px",
-                                opacity: "0.8",
-                                fontWeight: "300",
-                            }}
-                        >
-                            MUSIC ARCHIVE ♱༺༒︎⊰
-                        </span>
+                    {/* BUSCADOR INTEGRADO */}
+                    <div className="d-flex align-items-center flex-grow-1 me-md-5">
+                        <InputGroup style={{ maxWidth: "400px" }}>
+                            <InputGroup.Text
+                                style={{
+                                    background: "rgba(255,255,255,0.1)",
+                                    border: "none",
+                                    color: "white",
+                                }}
+                            >
+                                <MDBIcon fas icon="search" />
+                            </InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder="Buscar curso, instructor o etiqueta..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                                style={{
+                                    background: "rgba(255, 255, 255, 0.2)",
+                                    border: "none",
+                                    color: "white",
+                                    placeholderColor: "white",
+                                }}
+                                className="search-input-custom"
+                            />
+                        </InputGroup>
                     </div>
+
                     <Nav className="ms-auto d-none d-md-flex align-items-center">
                         <span
-                            className="small text-uppercase"
+                            className="small text-uppercase fw-bold"
                             style={{
-                                color: "rgba(255,255,255,0.3)",
+                                color: "white",
                                 letterSpacing: "2px",
-                                fontSize: "0.7rem",
+                                fontSize: "0.75rem",
                             }}
                         >
-                            {/* Cambia dinámicamente según la página actual */}
-                            Release Vol.{" "}
-                            {currentPage.toString().padStart(2, "0")} —{" "}
-                            {new Date().getFullYear()}
+                            Página {currentPage} de {totalPages || 1} —{" "}
+                            {filteredItems.length} Resultados
                         </span>
                     </Nav>
                 </Container>
             </Navbar>
 
             <div className="container-fluid px-md-5 mt-5">
-                <div className="d-flex flex-column gap-5 align-items-center pb-5">
-                    {currentItems.map((track) => (
-                        <CardMusic
-                            key={track.id}
-                            id={track.id}
-                            nombre={track.nombre}
-                            artista={track.artista}
-                            etiqueta={track.etiqueta}
-                            urlmusic={track.urlmusic}
-                            image={track.image}
-                        />
-                    ))}
+                <div className="d-flex flex-column gap-3 align-items-center pb-5">
+                    {currentItems.length > 0 ? (
+                        currentItems.map((track) => (
+                            <CardMusic
+                                key={track.id}
+                                id={track.id}
+                                nombre={track.nombre}
+                                artista={track.artista}
+                                etiqueta={track.etiqueta}
+                                urlmusic={track.urlmusic}
+                                image={track.image}
+                            />
+                        ))
+                    ) : (
+                        <div className="text-center py-5">
+                            <MDBIcon
+                                fas
+                                icon="search-minus"
+                                size="3x"
+                                className="mb-3 text-muted"
+                            />
+                            <h4 className="text-muted">
+                                No se encontraron cursos que coincidan con tu
+                                búsqueda
+                            </h4>
+                        </div>
+                    )}
                 </div>
 
-                {/* --- CONTROLES DE PAGINACIÓN / VOLÚMENES --- */}
+                {/* --- CONTROLES DE PAGINACIÓN --- */}
                 {totalPages > 1 && (
-                    <div className="d-flex justify-content-center gap-3 mt-4 pb-5">
+                    <div className="d-flex justify-content-center gap-2 mt-4 pb-5">
                         {[...Array(totalPages)].map((_, index) => (
                             <button
                                 key={index + 1}
                                 onClick={() => paginate(index + 1)}
-                                className={`custom-button ${currentPage === index + 1 ? "clicked" : ""}`}
+                                className={`btn ${currentPage === index + 1 ? "btn-light" : "btn-outline-light"}`}
                                 style={{
-                                    width: "50px",
-                                    padding: "10px",
-                                    fontSize: "0.8rem",
-                                    border:
-                                        currentPage === index + 1
-                                            ? "1px solid crimson"
-                                            : "1px solid #333",
-                                    background:
-                                        currentPage === index + 1
-                                            ? "rgba(220, 20, 60, 0.1)"
-                                            : "transparent",
+                                    width: "45px",
+                                    borderRadius: "8px",
+                                    fontWeight: "bold",
                                 }}
                             >
                                 {index + 1}

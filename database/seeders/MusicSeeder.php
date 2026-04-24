@@ -11,7 +11,7 @@ class MusicSeeder extends Seeder
     {
         // Ejemplo manual para tu frontend
         Music::create([
-            'nombre'   => 'Trust Issues',
+            'nombre'   => 'Estatutos Generales del PAN',
             'artista'  => 'Snuffmex x Towena',
             'etiqueta' => 'NEW RELEASE',
             'urlmusic' => 'https://soundcloud.com/snuffmex/trustissues',

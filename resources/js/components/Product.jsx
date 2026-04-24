@@ -262,8 +262,8 @@ function Product() {
                         onClick={handleButtonClick}
                         disabled={isButtonDisabled || !product.available}
                     >
-                        <MDBIcon fas icon="shopping-cart" />{" "}
-                        {isButtonDisabled ? null : "Add to Cart"}{" "}
+                        <MDBIcon fas icon="user-plus" />{" "}
+                        {isButtonDisabled ? null : " Registrarse"}{" "}
                     </MDBBtn>
                 </div>
             </div>
@@ -290,7 +290,7 @@ function Product() {
                         style={{ textDecoration: "none" }}
                     >
                         <MDBIcon fas icon="long-arrow-alt-left me-2" />
-                        Back to shop
+                        Volver
                     </Link>
                 </MDBTypography>
             </div>

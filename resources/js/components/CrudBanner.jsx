@@ -281,7 +281,9 @@ function CrudBanner() {
             <br />
 
             <MDBTable>
-                <MDBTableHead dark>
+                <MDBTableHead
+                    style={{ backgroundColor: "#f46112", color: "white" }}
+                >
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Alt Text</th>

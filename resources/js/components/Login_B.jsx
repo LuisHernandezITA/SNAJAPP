@@ -123,10 +123,8 @@ function Login_B() {
 
                 await authenticateUser(userId);
 
-                // Mostramos la notificación
                 showNotification("¡Bienvenido!");
 
-                // Esperamos 1.5 segundos antes de navegar para que el usuario lea el mensaje
                 setTimeout(() => {
                     navigate("/");
                 }, 1500);

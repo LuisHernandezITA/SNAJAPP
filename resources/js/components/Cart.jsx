@@ -121,13 +121,14 @@ function Cart() {
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    Shopping Cart
+                                    Cursos
                                 </h2>
                                 <br></br>
                                 {!isLoggedIn && ( // Display the link only if the user is not authenticated
                                     <div>
                                         <p>
-                                            You need to log in to use the cart.
+                                            Necesitas estar registrado para ver
+                                            los cursos.
                                         </p>
                                         <Link to="/Login_B">Log in</Link>
                                     </div>
@@ -276,7 +277,7 @@ function Cart() {
                                                     color: "black",
                                                 }}
                                             >
-                                                Back to shop
+                                                Volver
                                             </Link>
                                         </MDBTypography>
                                     </MDBTypography>

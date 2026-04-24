@@ -2,7 +2,7 @@
    1. FULL APP & RESET
    ========================================= */
 html, body, #root {
-    background-color: rgb(255, 255, 255) !important;
+    background: linear-gradient(135deg, rgb(55, 163, 245) 55%, rgb(253, 17, 17) 100%) !important;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -301,3 +301,93 @@ body {
 .custom-toggler-icon .navbar-toggler-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
 }
+
+/* INICIO */
+
+/* --- ESTILOS INSTITUCIONALES ENFOCA --- */
+
+/* 1. El Degradado Naranja Institucional (Tomado de tu imagen de ENFOCA) */
+.enfoca-gradient {
+    /* Degradado de Naranja a Naranja más rojizo */
+    background: rgb(244, 97, 18);
+    background: linear-gradient(135deg, rgb(244, 97, 18) 0%, rgb(234, 29, 46) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Patrón sutil de fondo (opcional, como el de tu referencia) */
+.enfoca-gradient::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Reemplaza con una textura de patrón si tienes una */
+    background-image: url('data:image/svg+xml;base64,...'); /* svg pattern */
+    opacity: 0.05; 
+    z-index: 0;
+}
+.enfoca-gradient .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* 2. Botón Institucional Azul (Para contrastar) */
+.btn-enfoca-blue {
+    background-color: #1a3c5e !important;
+    border: none !important;
+    color: white !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(26,60,94,0.3);
+}
+
+.btn-enfoca-blue:hover {
+    background-color: #ff914d !important; /* Cambia a naranja al hacer hover */
+    color: #1a3c5e !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(26,60,94,0.5);
+}
+
+/* 3. Animación de pulso para el badge */
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220,53,69,0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(220,53,69,0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220,53,69,0); }
+}
+
+/* 4. Efecto de elevación al hacer hover en las tarjetas de abajo */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-10px);
+}
+
+.fw-black {
+    font-weight: 900 !important;
+}
+
+/* Para que se vea bien en móviles */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}
+
+/*Normatividad*/
+
+.card.mb-2:hover {
+    transform: translateX(10px); /* Se desplaza un poco a la derecha al pasar el mouse */
+    background-color: #ffffff !important;
+    border-left: 5px solid #f46112 !important; /* Añade una línea naranja al inicio */
+}
+
+/* Color del texto de ayuda (Placeholder) */
+.search-input-custom::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1; /* Necesario para Firefox */
+}
+
