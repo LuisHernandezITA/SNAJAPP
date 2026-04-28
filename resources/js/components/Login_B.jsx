@@ -53,38 +53,69 @@ function Login_B() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        // Actualizamos el estado del formulario primero
+        const updatedFormData = { ...formData, [name]: value };
+        setFormData(updatedFormData);
 
         let errorMsg = "";
+
+        // 1. Validación de campos vacíos
         if (value.trim() === "") {
             errorMsg = `* Este campo es requerido`;
         }
-
-        if (
+        // 2. Validación específica de Email
+        else if (
             name === "email" &&
-            value !== "" &&
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
         ) {
             errorMsg = "* Email inválido";
         }
-
-        if (name === "c_password" && value !== formData.password) {
+        // 3. Validación específica de Teléfono (ejemplo: 10 dígitos)
+        else if (name === "phone_number" && !/^\d{10}$/.test(value)) {
+            errorMsg = "* El teléfono debe tener 10 dígitos";
+        }
+        // 4. Validación de Confirmar Contraseña
+        else if (name === "c_password" && value !== updatedFormData.password) {
             errorMsg = "* Las contraseñas no coinciden";
+        }
+        // 5. Si cambias la contraseña original, re-validar la confirmación
+        else if (
+            name === "password" &&
+            formData.c_password !== "" &&
+            value !== formData.c_password
+        ) {
+            setErrors((prev) => ({
+                ...prev,
+                c_password: "* Las contraseñas no coinciden",
+            }));
         }
 
         setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
     };
 
     const isRegisterValid = () => {
-        return (
-            formData.full_name &&
-            formData.email &&
-            formData.password &&
-            formData.c_password === formData.password &&
-            formData.state &&
-            formData.municipality &&
-            Object.values(errors).every((err) => err === "" || err === null)
+        // Campos requeridos que no deben estar vacíos
+        const requiredFields = [
+            "full_name",
+            "email",
+            "phone_number",
+            "state",
+            "municipality",
+            "password",
+            "c_password",
+        ];
+
+        const allFieldsFilled = requiredFields.every(
+            (field) => formData[field] && formData[field].trim() !== "",
         );
+
+        // No debe haber ningún mensaje de error en el objeto errors
+        const hasNoErrors = Object.values(errors).every(
+            (err) => err === "" || err === null,
+        );
+
+        return allFieldsFilled && hasNoErrors;
     };
 
     const isLoginValid = () => {
@@ -199,27 +230,42 @@ function Login_B() {
                 <MDBTabsPane show={justifyActive === "tab1"}>
                     <form onSubmit={handleLogin}>
                         <MDBInput
-                            wrapperClass="mb-4"
+                            wrapperClass="mb-1"
                             label="Email"
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                         />
+                        {/* Validación visual de email en Login */}
+                        {errors.email && (
+                            <p className="text-danger small mb-3">
+                                {errors.email}
+                            </p>
+                        )}
+
                         <MDBInput
-                            wrapperClass="mb-4"
-                            label="Password"
+                            wrapperClass="mb-1"
+                            label="Contraseña"
                             type="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                         />
+                        {/* Validación visual de campo vacío en Login */}
+                        {errors.password && (
+                            <p className="text-danger small mb-3">
+                                {errors.password}
+                            </p>
+                        )}
+
                         <MDBBtn
-                            className="mb-4 w-100"
+                            className="mt-3 mb-4 w-100"
                             type="submit"
+                            // El botón solo se activa si los campos son válidos y no hay una petición en curso
                             disabled={!isLoginValid() || !isButtonEnabled}
                         >
-                            Sign in
+                            {isButtonEnabled ? "Ingresar" : "Cargando..."}
                         </MDBBtn>
                     </form>
                 </MDBTabsPane>
@@ -228,79 +274,119 @@ function Login_B() {
                 <MDBTabsPane show={justifyActive === "tab2"}>
                     <form onSubmit={handleRegister}>
                         <MDBInput
-                            wrapperClass="mb-3"
-                            label="Full Name"
+                            wrapperClass="mb-1" // Bajamos el margen para mostrar el error debajo
+                            label="Nombre Completo"
                             type="text"
                             name="full_name"
+                            value={formData.full_name}
                             onChange={handleChange}
                         />
+                        {errors.full_name && (
+                            <p className="text-danger small mb-2">
+                                {errors.full_name}
+                            </p>
+                        )}
+
                         <MDBRow>
                             <MDBCol>
                                 <MDBInput
-                                    wrapperClass="mb-3"
+                                    wrapperClass="mb-1"
                                     label="Email"
                                     type="email"
                                     name="email"
+                                    value={formData.email}
                                     onChange={handleChange}
                                 />
+                                {errors.email && (
+                                    <p className="text-danger small mb-2">
+                                        {errors.email}
+                                    </p>
+                                )}
                             </MDBCol>
                             <MDBCol>
                                 <MDBInput
-                                    wrapperClass="mb-3"
-                                    label="Phone"
+                                    wrapperClass="mb-1"
+                                    label="Numero Celular"
                                     type="text"
                                     name="phone_number"
+                                    value={formData.phone_number}
                                     onChange={handleChange}
                                 />
+                                {errors.phone_number && (
+                                    <p className="text-danger small mb-2">
+                                        {errors.phone_number}
+                                    </p>
+                                )}
                             </MDBCol>
                         </MDBRow>
+
                         <MDBRow>
                             <MDBCol>
                                 <MDBInput
-                                    wrapperClass="mb-3"
-                                    label="State"
+                                    wrapperClass="mb-1"
+                                    label="Estado"
                                     type="text"
                                     name="state"
+                                    value={formData.state}
                                     onChange={handleChange}
                                 />
+                                {errors.state && (
+                                    <p className="text-danger small mb-2">
+                                        {errors.state}
+                                    </p>
+                                )}
                             </MDBCol>
                             <MDBCol>
                                 <MDBInput
-                                    wrapperClass="mb-3"
-                                    label="Municipality"
+                                    wrapperClass="mb-1"
+                                    label="Municipio"
                                     type="text"
                                     name="municipality"
+                                    value={formData.municipality}
                                     onChange={handleChange}
                                 />
+                                {errors.municipality && (
+                                    <p className="text-danger small mb-2">
+                                        {errors.municipality}
+                                    </p>
+                                )}
                             </MDBCol>
                         </MDBRow>
+
                         <MDBInput
-                            wrapperClass="mb-3"
-                            label="Password"
+                            wrapperClass="mb-1"
+                            label="Contraseña"
                             type="password"
                             name="password"
+                            value={formData.password}
                             onChange={handleChange}
                         />
+                        {errors.password && (
+                            <p className="text-danger small mb-2">
+                                {errors.password}
+                            </p>
+                        )}
+
                         <MDBInput
-                            wrapperClass="mb-4"
-                            label="Confirm Password"
+                            wrapperClass="mb-1"
+                            label="Confirmar Contraseña"
                             type="password"
                             name="c_password"
+                            value={formData.c_password}
                             onChange={handleChange}
                         />
-
                         {errors.c_password && (
-                            <p className="text-danger small">
+                            <p className="text-danger small mb-2">
                                 {errors.c_password}
                             </p>
                         )}
 
                         <MDBBtn
-                            className="mb-4 w-100"
+                            className="mt-3 mb-4 w-100"
                             type="submit"
                             disabled={!isRegisterValid()}
                         >
-                            Sign up
+                            Registrar
                         </MDBBtn>
                     </form>
                 </MDBTabsPane>

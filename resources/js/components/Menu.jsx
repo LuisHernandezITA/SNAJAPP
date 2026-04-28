@@ -82,7 +82,7 @@ function Menu() {
             location.pathname === "/login" ||
             location.pathname === "/cart" ||
             location.pathname === "/products" ||
-            location.pathname === "/categories" ||
+            location.pathname === "/users" ||
             location.pathname === "/banners" ||
             location.pathname === "/songs" ||
             location.pathname.startsWith("/item")
@@ -135,8 +135,8 @@ function Menu() {
                                         <Nav.Link as={Link} to="banners">
                                             BANNERS
                                         </Nav.Link>
-                                        <Nav.Link as={Link} to="categories">
-                                            CATEGORIAS
+                                        <Nav.Link as={Link} to="users">
+                                            USUARIOS
                                         </Nav.Link>
                                         <Nav.Link as={Link} to="products">
                                             CURSOS

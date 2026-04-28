@@ -76,6 +76,12 @@ Route::middleware(['auth:api', 'isAdmin'])->group(function () {
     Route::put('categories_update/{id}', [CategoryController::class, 'update']);
     Route::delete('categories_destroy/{id}', [CategoryController::class, 'destroy']);
 
+    // CRUD Users
+    Route::get('/user_edit/{id}', [UserController::class, 'edit']);        // <--- LA QUE TE FALTA (Devuelve datos para el form)
+    Route::post('/user_store', [UserController::class, 'store']);          // Crear nuevo (si el admin lo requiere)
+    Route::put('/user_update_admin/{id}', [UserController::class, 'updateAdmin']); // La acción de guardar cambios
+    Route::delete('/user_destroy/{id}', [UserController::class, 'destroy']);
+
     // CRUD Banners
     Route::get('banners/{id}/edit', [BannerController::class, 'edit']);
     Route::post('banners_store', [BannerController::class, 'store']);

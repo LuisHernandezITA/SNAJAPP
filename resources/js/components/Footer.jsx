@@ -19,7 +19,7 @@ function Footer() {
             {/* Sección de redes sociales con borde sutil */}
             <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom border-secondary">
                 <div className="me-5 d-none d-lg-block">
-                    <span>Get connected with us on social networks:</span>
+                    <span>Conecta con nuestras redes sociales:</span>
                 </div>
 
                 <div>
@@ -61,14 +61,14 @@ function Footer() {
                             <p className="text-white-50">
                                 {" "}
                                 {/* Texto un poco más suave que el blanco puro */}
-                                Your store description goes here. Elevating
-                                Mexican culture through premium snuff products.
+                                Accion Juvenil, Accion Juvenil, Accion Juvenil
+                                Cultura de jovenes en politica mexicana.
                             </p>
                         </MDBCol>
 
                         <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Products
+                                Cursos
                             </h6>
                             <p>
                                 <a href="#!" className="text-white-50">
@@ -115,7 +115,7 @@ function Footer() {
                             className="mx-auto mb-md-0 mb-4"
                         >
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Contact
+                                Contacto
                             </h6>
                             <p>
                                 <MDBIcon
@@ -131,7 +131,7 @@ function Footer() {
                                     className="me-3"
                                     color="light"
                                 />{" "}
-                                info@snuffmexa.com
+                                info@accionjuvenil.com
                             </p>
                             <p>
                                 <MDBIcon
@@ -156,7 +156,7 @@ function Footer() {
             >
                 © 2026 Copyright:
                 <a className="text-reset fw-bold ms-1" href="#">
-                    Snuff Mexa Cult
+                    Accion Juvenil 2026
                 </a>
             </div>
         </MDBFooter>

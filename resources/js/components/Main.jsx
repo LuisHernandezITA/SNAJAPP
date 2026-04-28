@@ -6,7 +6,7 @@ import Login_B from "./Login_B";
 import Cart from "./Cart";
 import Product from "./Product";
 import Crud from "./Crud";
-import CrudCategory from "./CrudCategory";
+import CrudUsers from "./CrudUsers";
 import CrudBanner from "./CrudBanner";
 import CrudMusic from "./CrudMusic";
 import MusicBlog from "./MusicBlog";
@@ -18,7 +18,7 @@ function Main() {
                 <Route path="/" element={<Menu />}>
                     <Route path="item/:id" element={<Product />} />
                     <Route path="products" element={<Crud />} />
-                    <Route path="categories" element={<CrudCategory />} />
+                    <Route path="users" element={<CrudUsers />} />
                     <Route path="banners" element={<CrudBanner />} />
                     <Route path="songs" element={<CrudMusic />} />
                     <Route path="store" element={<ListCard />} />
